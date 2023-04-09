@@ -1,0 +1,1 @@
+- Add and imporove dicats, add actuall spelling
