@@ -5,34 +5,51 @@ import playsound #for custom mp3 files
 # Initialize text-to-speech engine
 engine = pyttsx3.init()
 
-def playGame(rounds, words, config): #FIXME rounds are kind of unnecessary here
-    gameType=input("Linear [L] or Random [R]:") #TODO create a while-loop until valid input
-    if gameType in ["L","l","Linear","linear"]:
-        #start at
+def playGame(rounds, words, config): #TODO during rewrtiting rewrite this as well (rounds are neededonly for random)
+    invalidStartingInput=True
+    while invalidStartingInput:
+        gameType=input("Linear [L] or Random [R]:")
+        if gameType in ["L","l","Linear","linear"]:
+            invalidStartingInput=False
+            linearGame(words)
+
+        elif gameType in ["R","r","Random","random"]:
+            invalidStartingInput=False
+            randomGame(words,rounds)
+        
+
+def linearGame(words):
+    #starting point logic
+    invalidStartingInput=True
+    while invalidStartingInput:
         start=input("Start at (0 by default):")
         if len(start)==0:
             start=0
-        elif len(start)<4:
-            start=int(start) #TODO implement this using try/except
+            invalidStartingInput=False
         else:
-            for wordI,word in enumerate(words):
-                if word[0]==start:
-                    start=wordI
-                    break
-            if type(start)==str: #TODO create a while-loop until valid input
-                print("Bad index") #And change this to something more understandable
-                exit()
+            try:
+                start=int(start)
+            except ValueError:
+                for wordI,word in enumerate(words):
+                    if word[0]==start:
+                        start=wordI
+                        invalidStartingInput=False
+                        break
+            else:
+                if start<len(words):
+                    invalidStartingInput=False
 
-        for wordI in range(start,len(words)):
-            while gameRound(words[wordI][0])=="r":
-                pass
+    #actually run the code
+    for wordI in range(start,len(words)):
+        while gameRound(words[wordI][0])=="r": #typing r will repeat the word
+            pass
 
-    elif gameType in ["R","r","Random","random"]:
-        from random import randint
-        for i in range(100):
-            randI=randint(0,len(words)-1)
-            while gameRound(words[randI][0])=="r":
-                pass
+def randomGame(words,rounds):
+    from random import randint
+    for i in range(rounds):
+        randI=randint(0,len(words)-1)
+        while gameRound(words[randI][0])=="r":
+            pass
 
 def gameRound(word):
     print(f"Word: {word}")
