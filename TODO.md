@@ -1,1 +1,3 @@
 - Add and imporove dicats, add actuall spelling
+- fix structure and do TODOs and FIXMEs
+- remake cli into a normal input selection based program
