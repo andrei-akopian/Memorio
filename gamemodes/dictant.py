@@ -26,37 +26,46 @@ def randomGame(rounds,words):
         response=gameRound(words[randI][0])
         while response=="r":
             response=gameRound(words[randI][0])
-        if response==words[randI][0]: #TODO add some percentage counters here
-            correctCounter+=1
+        if response==words[randI][0]: 
+            correctCounter+=1 #TODO add familarity
             print("Correct")
         else:
             print("Correct Spelling:",words[randI][0])
-    print("Percentage Correct:",round(correctCounter/rounds,1))
+    print("Percentage Correct:",str(round(correctCounter/rounds,1))+"%")
 
 def linearGame(words):
-    #start at
-    start=input("Start at (0 by default):")
-    if len(start)==0:
-        start=0
-    elif len(start)<4:
-        start=int(start) #TODO implement this using try/except
-    else:
-        for wordI,word in enumerate(words):
-            if word[0]==start:
-                start=wordI
-                break
-        if type(start)==str: #TODO create a while-loop until valid input
-            print("Bad index") #And change this to something more understandable
-            exit()
+    #starting point logic
+    invalidStartingInput=True
+    while invalidStartingInput:
+        start=input("Start at (0 by default):")
+        if len(start)==0:
+            start=0
+            invalidStartingInput=False
+        else:
+            try:
+                start=int(start)
+            except ValueError:
+                for wordI,word in enumerate(words):
+                    if word[0]==start:
+                        start=wordI
+                        invalidStartingInput=False
+                        break
+            else:
+                if start<len(words):
+                    invalidStartingInput=False
 
+    correctCounter=0
     for wordI in range(start,len(words)):
         response=gameRound(words[wordI][0])
         while response=="r":
             response=gameRound(words[wordI][0])
-        if response==words[wordI][0]: #TODO add some percentage counters here
+        if response==words[wordI][0]:
+            correctCounter+=1
+            #TODO add familarity
             print("Correct")
         else:
-            print("Correct Spelling:",words[wordI][0])
+            print("Wrong, right spelling:",words[wordI][0])
+    print("Percentage Correct:",str(round(correctCounter/rounds,1))+"%")
 
 def gameRound(word):
     print(f"Word: {word}")
