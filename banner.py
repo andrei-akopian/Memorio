@@ -1,3 +1,4 @@
+#TODO add stats etc
 def displayBanner(Vocsets): #TODO rename banner to something else
     import random
     with open("/Users/andrei/Documents/Coding/Projects/AnsiConverter/logoCompressed.txt") as f:
@@ -37,11 +38,8 @@ def displayBanner(Vocsets): #TODO rename banner to something else
                     else:
                         casefliper=1
                         word=wordlist[random.randint(0,len(wordlist)-1)].lower()
-                print(YELLOW+word[wordi],end="\033[0m")
+                print(YELLOW+word[wordi],end=BLACK)
                 pixelI+=1
-                if pixelI==len(logo):
-                    print()
-                    exit()
                 wordi+=1
             else:
                 if len(word)==0:
@@ -54,8 +52,13 @@ def displayBanner(Vocsets): #TODO rename banner to something else
                 word=""
                 wordi=0
             x+=1
+            if pixelI==len(logo):
+                break
         print(word[wordi:])
         word=""
         wordi=0
         x=0
         y+=1
+        if pixelI==len(logo):
+            print("\033[0m")
+            break
