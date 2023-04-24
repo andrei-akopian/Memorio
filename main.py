@@ -2,6 +2,7 @@ import click
 import configparser
 import importlib #FIXME try to come up with a proper fix for this
 import json
+import banner
 
 @click.group()
 def commands():
@@ -43,9 +44,10 @@ def game(gametype, rounds, vocset):
     print("you can play with all datasets or only certain ones")
   elif gametype in config["gamemodes"]:
     gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
-    Vocset=loadVocset(config["Settings"]["user"])
-    gameModule.playGame(int(rounds), Vocset[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
-    unloadVocset(Vocset)
+    Vocsets=loadVocsets(config["Settings"]["user"])
+    banner.displayBanner(Vocsets)
+    gameModule.playGame(int(rounds), Vocsets[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
+    unloadVocsets(Vocsets)
   else:
     print("No such gamemode")
 
@@ -72,15 +74,15 @@ def covertVocSet(name,path):
   with open("vocabulary.json","w") as f:
     json.dump(oldData,f)
 
-def loadVocset(user):
-  Vocset={}
+def loadVocsets(user):
+  Vocsets={}
   with open(user + "_vocabulary.json", "r") as f:
-    Vocset = json.load(f)
-  return Vocset
+    Vocsets = json.load(f)
+  return Vocsets
 
-def unloadVocset(Vocset):
+def unloadVocsets(Vocsets):
   with open(config["Settings"]["user"] + "_vocabulary.json", "w") as f:
-   json.dump(Vocset,f)
+   json.dump(Vocsets,f)
 
 commands.add_command(newUserSetup)
 commands.add_command(game)
