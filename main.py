@@ -45,7 +45,9 @@ def game(gametype, rounds, vocset):
   elif gametype in config["gamemodes"]:
     gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
     Vocsets=loadVocsets(config["Settings"]["user"])
-    banner.displayBanner(Vocsets)
+    #Display Banner
+    banner.displayBanner(Vocsets,config)
+
     gameModule.playGame(int(rounds), Vocsets[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
     unloadVocsets(Vocsets)
   else:

@@ -1,23 +1,23 @@
-Welcome
+Welcome to Meorio
+Version: {version}
 
 
-
-ad
-
-
-
-
+more info
 
 
 
 
-asdf
 
 
 
 
-dfa
+even more info
+
+
+
+
+info into
 
 
 Good moringing
---------------END----------
+L23-------------END-----------

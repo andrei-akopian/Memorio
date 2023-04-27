@@ -1,7 +1,10 @@
 #TODO add stats etc
-def displayBanner(Vocsets): #TODO rename banner to something else
+def displayBanner(Vocsets,config): #TODO rename banner to something else
     #load in
     import random
+    import os
+
+    terminal_size = os.get_terminal_size() #TODO put this into main when rewritting
     bannertext=[]
     with open("logoPixels.txt","r") as f:
         logoRaw=f.readlines()
@@ -90,6 +93,8 @@ def displayBanner(Vocsets): #TODO rename banner to something else
 
     for lineI in range(len(banner)):
         banner[lineI][0]+=" "*(maxlen-banner[lineI][1])+"\033[0m"
-        print(banner[lineI][0],bannertext[lineI],end="") #TODO deal with bannertext \n when adding the config stats etc.
+        print(banner[lineI][0],
+            bannertext[lineI][:terminal_size[0]-maxlen-1].format(version=config["About"]["version"]),
+            end="") #TODO deal with bannertext \n when adding the config stats etc.
     print()
     return banner
