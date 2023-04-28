@@ -21,17 +21,19 @@ def displayBanner(Vocsets,config): #TODO rename banner to something else
     YELLOW="\033[38;5;220m"
     BLACK="\033[38;5;240m"
 
-    x=0
-    y=0
+    #generate word list
     wordlist=[]
     for key in Vocsets.keys():
         i=0
-        while len(wordlist)<100:
-            wordlist.append(Vocsets[key]["data"][i][0])
+        while len(wordlist)<100 and i<len(Vocsets[key]["data"]):
+            if len(Vocsets[key]["data"][i][0])<7: #7 is the word length limit
+                wordlist.append(Vocsets[key]["data"][i][0])
             i+=1
         if len(wordlist)==100:
             break
 
+    x=0
+    y=0
     word=""
     wordi=0
     pixelI=0

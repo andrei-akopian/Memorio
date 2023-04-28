@@ -44,10 +44,6 @@ def game(gametype, rounds, vocset):
     print("you can play with all datasets or only certain ones")
   elif gametype in config["gamemodes"]:
     gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
-    Vocsets=loadVocsets(config["Settings"]["user"])
-    #Display Banner
-    banner.displayBanner(Vocsets,config)
-
     gameModule.playGame(int(rounds), Vocsets[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
     unloadVocsets(Vocsets)
   else:
@@ -94,4 +90,9 @@ commands.add_command(covertVocSet)
 if __name__ == "__main__":
   config = configparser.ConfigParser()
   config.read("config.ini")
+
+  #Load and display vocset and banner
+  Vocsets=loadVocsets(config["Settings"]["user"])
+  banner.displayBanner(Vocsets,config)
+
   commands()
