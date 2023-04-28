@@ -1,12 +1,12 @@
 Welcome to Meorio
 Version: {version}
+by andrei-akopian
+Source Code:
+https://github.com/andrei-akopian/Memorio
+Written in Python
 
-
-more info
-
-
-
-
+Current user: {user}
+Current keymap: {keymap}
 
 
 
@@ -19,5 +19,5 @@ even more info
 info into
 
 
-Good moringing
+Good morning
 L23-------------END-----------

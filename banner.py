@@ -91,10 +91,13 @@ def displayBanner(Vocsets,config): #TODO rename banner to something else
         if pixelI==len(logo):
             break
 
+    #TODO make the bannertext display the input variables from a generated list.
     for lineI in range(len(banner)):
         banner[lineI][0]+=" "*(maxlen-banner[lineI][1])+"\033[0m"
         print(banner[lineI][0],
-            bannertext[lineI][:terminal_size[0]-maxlen-1].format(version=config["About"]["version"]),
-            end="") #TODO deal with bannertext \n when adding the config stats etc.
+            bannertext[lineI][:terminal_size[0]-maxlen-1].strip("\n").format(
+                version=config["About"]["version"],
+                user=config["Settings"]["user"],
+                keymap=config["Settings"]["keymap"]))
     print()
     return banner
