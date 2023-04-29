@@ -35,11 +35,11 @@ def newUserSetup(user):
 
 
 #play
-@click.command("play")
-@click.option("-g","--gametype", default="None", type=str, required=False)
-@click.option("-v","--vocset", type=str, required=True) #FIXME rename vocset and Vocset
-@click.argument("rounds")
-def game(gametype, rounds, vocset):
+# @click.command("play")
+# @click.option("-g","--gametype", default="None", type=str, required=False)
+# @click.option("-v","--vocset", type=str, required=True) #FIXME rename vocset and Vocset
+# @click.argument("rounds")
+def game(gametype, vocset, rounds):
   if gametype == "None":
     print("you can play with all datasets or only certain ones")
   elif gametype in config["gamemodes"]:
@@ -82,10 +82,20 @@ def unloadVocsets(Vocsets):
   with open(config["Settings"]["user"] + "_vocabulary.json", "w") as f:
    json.dump(Vocsets,f)
 
+@click.command("normal",help="just type this")
+def normal():
+  action=input("Action:")
+  if action=="play":
+    gametype=input("Gametype:")
+    vocset=input("Vocset:")
+    rounds=input("Rounds:")
+    game(gametype,vocset,rounds)
+
 commands.add_command(newUserSetup)
-commands.add_command(game)
+# commands.add_command(game)
 commands.add_command(configure)
 commands.add_command(covertVocSet)
+commands.add_command(normal)
 
 if __name__ == "__main__":
   config = configparser.ConfigParser()
