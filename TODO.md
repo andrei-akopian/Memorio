@@ -4,5 +4,6 @@
 - Add color using ansi
 - make it so you can stop the exercise at any point.
 - Add the word familarity to all modes
-- add args input
+- add args input and validate them
 - figure out how config argument is being passed around globaly
+- Add more advanced vocset edditing and importing

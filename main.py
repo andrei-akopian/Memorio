@@ -5,14 +5,19 @@ import banner
 import sys
 
 #switching user
-def configure(target,value):
+def configure(clargs):
+  print("=Configuration=")
+  target=selectionInput("Target: ",clargs)
+  value=selectionInput("Value: ",clargs)
   if target in config["Settings"]:
     config["Settings"][target]=value
   with open("config.ini", 'w') as f:
     config.write(f)
 
 #new user
-def newUserSetup(user):
+def newUserSetup(clargs):
+  print("=New User setup=")
+  vocsetName=selectionInput("Newuser name:",clargs)
   import json
   with open("vocabulary.json", "r") as f:
     data = json.load(f)
@@ -21,17 +26,23 @@ def newUserSetup(user):
   print("Your files are set up, you are ready to go!")
 
 #play
-def game(gametype, vocset, rounds):
-  if gametype == "None":
-    print("you can play with all datasets or only certain ones")
-  elif gametype in config["gamemodes"]:
+def game(clargs):
+  print("=Play Game=")#TODO add help&description here
+  gametype=selectionInput("Gametype: ",clargs)
+  vocset=selectionInput("Vocset: ",clargs) #the vocabulary set selection should probably be done differently
+  rounds=selectionInput("Rounds: ",clargs)
+  if gametype in config["gamemodes"]:
     gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
     gameModule.playGame(int(rounds), Vocsets[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
     unloadVocsets(Vocsets)
   else:
     print("No such gamemode")
 
-def covertVocSet(name,path): #TODO fix whatever is going on here
+def covertVocSet(clargs): #TODO fix whatever nameing is going on here
+  print("=Convert Vocset=")
+  vocsetName=selectionInput("Vocset Name:",clargs)
+  path=selectionInput("Path ot input file:",clargs)
+
   import csv
   oldData={}
   with open("vocabulary.json","r") as f:
@@ -50,24 +61,26 @@ def covertVocSet(name,path): #TODO fix whatever is going on here
   with open("vocabulary.json","w") as f:
     json.dump(oldData,f)
 
-def normal():
-  action=input("Action:") #TODO put all of these inputs into the actuall function
+def normal(clargs):
+  action=selectionInput("Action: ", clargs)
+
   if action=="play":
-    gametype=input("Gametype:")
-    vocset=input("Vocset:")
-    rounds=input("Rounds:")
-    game(gametype,vocset,rounds)
+    game(clargs)
   elif action=="configure":
-    target=input("Target:")
-    value=input("Value:")
-    configure(target, value)
+    configure(clargs)
   elif action=="convocset":
-    vocsetName=input("Vocset Name:")
-    path=input("Path ot input file:")
-    covertVocSet(vocsetName,path)
+    covertVocSet(clargs)
   elif action=="newuser":
-    vocsetName=input("Newuser name:")
-    newUserSetup(vocsetName)
+    newUserSetup(clargs)
+
+def selectionInput(prompt,clargs):
+  if len(clargs)>0:
+    user_input=clargs[0]
+    del clargs[0]
+    print(prompt+user_input)
+  else:
+    user_input=input(prompt)
+  return user_input
 
 #Vocset loader&Unloader
 def loadVocsets(user):
@@ -84,8 +97,9 @@ if __name__ == "__main__":
   config = configparser.ConfigParser()
   config.read("config.ini")
 
+  clargs=sys.argv
   #Load and display vocset and banner
   Vocsets=loadVocsets(config["Settings"]["user"])
   banner.displayBanner(Vocsets,config)
 
-  normal()
+  normal(clargs[1:])
