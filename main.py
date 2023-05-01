@@ -3,12 +3,13 @@ import importlib #FIXME try to come up with a proper fix for this
 import json
 import banner
 import sys
+import tools
 
 #switching user
 def configure(clargs):
   print("=Configuration=")
-  target=selectionInput("Target: ",clargs)
-  value=selectionInput("Value: ",clargs)
+  target,_=tools.selectionInput("Target: ",clargs)
+  value,_=selectionInput("Value: ",clargs)
   if target in config["Settings"]:
     config["Settings"][target]=value
   with open("config.ini", 'w') as f:
@@ -17,7 +18,7 @@ def configure(clargs):
 #new user
 def newUserSetup(clargs):
   print("=New User setup=")
-  vocsetName=selectionInput("Newuser name:",clargs)
+  vocsetName,_=tools.selectionInput("Newuser name:",clargs)
   import json
   with open("vocabulary.json", "r") as f:
     data = json.load(f)
@@ -28,15 +29,15 @@ def newUserSetup(clargs):
 #play
 def game(clargs):
   print("=Play Game=")#TODO add help&description here
-  gametype=selectionInput("Gametype: ",clargs)
-  vocset=selectionInput("Vocset: ",clargs) #the vocabulary set selection should probably be done differently
-  rounds=selectionInput("Rounds: ",clargs)
-  if gametype in config["gamemodes"]:
-    gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
-    gameModule.playGame(int(rounds), Vocsets[vocset]["data"], config) #TODO for future modes the entire vocset will be passed
-    unloadVocsets(Vocsets)
-  else:
-    print("No such gamemode")
+  #inputs
+  gametype,_=tools.selectionInput("Gametype: ",clargs,lambda gametype: (gametype in config["gamemodes"],None))
+  vocset,_=tools.selectionInput("Vocset: ",clargs,lambda vocset: (vocset in Vocsets.keys(),None)) #the vocabulary set selection should probably be done differently
+  _,rounds=tools.selectionInput("Rounds: ",clargs,lambda string: (string.isdigit(),int(string) if string.isdigit() else None))
+  #load game
+  gameModule=importlib.import_module("gamemodes."+config["gamemodes"][gametype])
+  gameModule.playGame(rounds, Vocsets[vocset]["data"], config, clargs) #TODO for future modes the entire vocset will be passed
+  #end
+  unloadVocsets(Vocsets)
 
 def covertVocSet(clargs): #TODO fix whatever nameing is going on here
   print("=Convert Vocset=")
@@ -62,7 +63,7 @@ def covertVocSet(clargs): #TODO fix whatever nameing is going on here
     json.dump(oldData,f)
 
 def normal(clargs):
-  action=selectionInput("Action: ", clargs)
+  action,_=tools.selectionInput("Action: ", clargs)
 
   if action=="play":
     game(clargs)
@@ -72,15 +73,6 @@ def normal(clargs):
     covertVocSet(clargs)
   elif action=="newuser":
     newUserSetup(clargs)
-
-def selectionInput(prompt,clargs):
-  if len(clargs)>0:
-    user_input=clargs[0]
-    del clargs[0]
-    print(prompt+user_input)
-  else:
-    user_input=input(prompt)
-  return user_input
 
 #Vocset loader&Unloader
 def loadVocsets(user):

@@ -1,21 +1,20 @@
 import pyttsx3
+import tools
 # import os
 # import playsound #for custom mp3 files TODO add this
 
 # Initialize text-to-speech engine
 engine = pyttsx3.init()
 
-def playGame(rounds, words, config):
-    gameType=input("Linear [L] or Random [R]:")
-    while True:
-        if gameType in ["L","l","Linear","linear"]:
-            linearGame(words)
-            break
-        elif gameType in ["R","r","Random","random"]:
-            randomGame(rounds,words)
-            break
-        else:
-            gameType=input("Reenter: Linear [L] or Random [R]:")
+def playGame(rounds, words, config, clargs):
+    _,mode=tools.selectionInput("Linear [L] or Random [R]:",clargs,modeInputChecker)
+    #Linear
+    if mode:
+        _,start=tools.selectionInput("Start at (0 by default):",clargs,startInputChecker)
+        linearGame(start,words)
+    #Random
+    else:
+        randomGame(rounds,words)
 
 def randomGame(rounds,words):
     from random import randint
@@ -33,27 +32,7 @@ def randomGame(rounds,words):
             print("Correct Spelling:",words[randI][0])
     print("Percentage Correct:",str(round(correctCounter/rounds,1))+"%")
 
-def linearGame(words):
-    #starting point logic
-    invalidStartingInput=True
-    while invalidStartingInput:
-        start=input("Start at (0 by default):")
-        if len(start)==0:
-            start=0
-            invalidStartingInput=False
-        else:
-            try:
-                start=int(start)
-            except ValueError:
-                for wordI,word in enumerate(words):
-                    if word[0]==start:
-                        start=wordI
-                        invalidStartingInput=False
-                        break
-            else:
-                if start<len(words):
-                    invalidStartingInput=False
-
+def linearGame(start,words):
     correctCounter=0
     for wordI in range(start,len(words)):
         response=gameRound(words[wordI][0])
@@ -80,3 +59,37 @@ def gameRound(word):
     engine.runAndWait()
     # Wait for user confirmation to proceed
     return input("Spell:")
+
+#linear start check function for tools.selectionInput
+def startInputChecker(start):
+    """linear start check function for tools.selectionInput
+    checks if inputed start for linear mode is valid, if yes, converts it into index
+    """
+    if len(start)==0: #if empty start at 0 by default
+        return True, None
+    elif start.isdigit():
+        start=int(start)
+        if 0<=start<len(words):
+            return True, start
+        else:
+            return False, None
+    else:
+        for wordI,word in enumerate(words):
+            if word[0]==start:
+                start=wordI
+                invalidStartingInput=False
+                return True, wordI
+        else:
+            return False, None
+
+#mode parsing check function for tools.selectionInput
+def modeInputChecker(str_mode): #TODO add Linear as default
+    """mode parsing check function for tools.selectionInput
+    Encodes Linear as 1, and random as 0
+    """
+    if str_mode in "lLinear": #TODO there must be a better way to do this
+        return True, 1
+    elif str_mode in "rRandom":
+        return True, 0
+    else:
+        return False, None
