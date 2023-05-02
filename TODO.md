@@ -7,4 +7,5 @@
 - add args input and validate them
 - figure out how config argument is being passed around globaly
 - Add more advanced vocset edditing and importing
-- Implement selectionInput in all modes
+- Implement selectionInput in all modes and their answerchoice Picking
+- Add option to save in the middle

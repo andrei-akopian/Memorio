@@ -1,6 +1,7 @@
+# You are given the defenition and you have to spell the corresponding word
 from random import randint
 
-def playGame(rounds, words, config):
+def playGame(rounds, words, config, clargs):
   correctCount = 0
   for roundN in range(rounds):
     print("#" * 20)

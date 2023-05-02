@@ -1,3 +1,4 @@
+# Gives you a defenition and 4 answer choices
 from random import randint
 
 def randomSelector(words):
@@ -23,7 +24,7 @@ def revealWord(word):
   print("Defenition: ",word[1])
   print("Trivia: ", " ".join(word[2]))
 
-def playGame(rounds, words,config):
+def playGame(rounds, words, config, clargs):
   #load
   keymap=list(config["Settings"]["keymap"])
 

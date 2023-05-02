@@ -1,55 +1,40 @@
+# Words are read, and you write them down by hand on paper
 import pyttsx3
-import os
-import playsound #for custom mp3 files
+import tools
+# import os
+# import playsound #for custom mp3 files TODO add this
 
 # Initialize text-to-speech engine
 engine = pyttsx3.init()
 
-def playGame(rounds, words, config): #TODO during rewrtiting rewrite this as well (rounds are neededonly for random)
-    invalidStartingInput=True
-    while invalidStartingInput:
-        gameType=input("Linear [L] or Random [R]:")
-        if gameType in ["L","l","Linear","linear"]:
-            invalidStartingInput=False
-            linearGame(words)
+def playGame(rounds, words, config, clargs):
+    _,mode=tools.selectionInput("Linear [L] or Random [R]:",clargs,modeInputChecker)
+    #Linear
+    if mode:
+        _,start=tools.selectionInput("Start at (0 by default):",clargs,startInputChecker)
+        linearGame(start,words)
+    #Random
+    else:
+        randomGame(rounds,words)
 
-        elif gameType in ["R","r","Random","random"]:
-            invalidStartingInput=False
-            randomGame(words,rounds)
-        
-
-def linearGame(words):
-    #starting point logic
-    invalidStartingInput=True
-    while invalidStartingInput:
-        start=input("Start at (0 by default):")
-        if len(start)==0:
-            start=0
-            invalidStartingInput=False
-        else:
-            try:
-                start=int(start)
-            except ValueError:
-                for wordI,word in enumerate(words):
-                    if word[0]==start:
-                        start=wordI
-                        invalidStartingInput=False
-                        break
-            else:
-                if start<len(words):
-                    invalidStartingInput=False
-
-    #actually run the code
-    for wordI in range(start,len(words)):
-        while gameRound(words[wordI][0])=="r": #typing r will repeat the word
-            pass
-
-def randomGame(words,rounds):
+def randomGame(rounds,words):
     from random import randint
+    correctCounter=0
     for i in range(rounds):
         randI=randint(0,len(words)-1)
-        while gameRound(words[randI][0])=="r":
-            pass
+
+        response=gameRound(words[randI][0])
+        while response=="r":
+            response=gameRound(words[wordI][0])
+        print("Correct spelling:",words[wordI][0])
+
+def linearGame(start,words):
+    correctCounter=0
+    for wordI in range(start,len(words)):
+        response=gameRound(words[wordI][0])
+        while response=="r":
+            response=gameRound(words[wordI][0])
+        print("Correct spelling:",words[wordI][0]) #TODO option to self report right/wrong
 
 def gameRound(word):
     print(f"Word: {word}")
@@ -63,4 +48,38 @@ def gameRound(word):
     engine.say(word)
     engine.runAndWait()
     # Wait for user confirmation to proceed
-    return input("Press Enter to continue...")
+    return input("Enter for Next:")
+
+#linear start check function for tools.selectionInput
+def startInputChecker(start):
+    """linear start check function for tools.selectionInput
+    checks if inputed start for linear mode is valid, if yes, converts it into index
+    """
+    if len(start)==0: #if empty start at 0 by default
+        return True, None
+    elif start.isdigit():
+        start=int(start)
+        if 0<=start<len(words):
+            return True, start
+        else:
+            return False, None
+    else:
+        for wordI,word in enumerate(words):
+            if word[0]==start:
+                start=wordI
+                invalidStartingInput=False
+                return True, wordI
+        else:
+            return False, None
+
+#mode parsing check function for tools.selectionInput
+def modeInputChecker(str_mode): #TODO add Linear as default
+    """mode parsing check function for tools.selectionInput
+    Encodes Linear as 1, and random as 0
+    """
+    if str_mode in "lLinear": #TODO there must be a better way to do this
+        return True, 1
+    elif str_mode in "rRandom":
+        return True, 0
+    else:
+        return False, None

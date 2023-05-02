@@ -1,3 +1,4 @@
+#Reads words alound, and you have to type them
 import pyttsx3
 import tools
 # import os
