@@ -34,9 +34,9 @@ def playGame(rounds, words, config, clargs):
     print("Round:", roundN)
     result = gameRound(words,keymap)
     if result: 
-      print("Correct")
+      print("\033[42mCorrect\033[0m")
     else: 
-      print("Wrong")
+      print("\033[41mWrong\033[0m")
     correctCount += result
 
   print("Score:", round(correctCount / rounds, 3) * 100, "%")
@@ -54,6 +54,10 @@ def gameRound(words,keymap):
     try:
       response = keymap.index(response)
     except:
+      if isdigit(response):
+        response = int(response)
+        if 0<=response<=3:
+          break
       response = input("G:")
   if response == answer:
     words[options[answer]][-1]=abs(words[options[answer]][-1]-5) #TODO add better logic here
