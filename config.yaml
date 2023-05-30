@@ -1,0 +1,21 @@
+About:
+  version: 0.0.1
+
+Settings:
+  user: andrei
+  keymap: asdf
+
+gamemodes:
+  d-mc:
+    filename: defineMultipleChoice
+    help: Given a definition, choose matching word
+  s:
+    filename: spelling
+    help: Given a definition, spell corresponging word
+  spellingbee:
+    filename: spellingBee
+    help: Given a definition, reads words aloud one by one write them on paper
+  dictant:
+    filename: dictant
+    help: Given a definition, reads words aloud and you spell them
+

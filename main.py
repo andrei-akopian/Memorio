@@ -1,9 +1,9 @@
-import configparser
+import yaml
 import importlib #FIXME try to come up with a proper fix for this
 import json
 import banner
 import sys
-import tools
+from utils import tools, helper
 
 #switching user
 def configure(clargs):
@@ -12,8 +12,8 @@ def configure(clargs):
   value,_=selectionInput("Value: ",clargs)
   if target in config["Settings"]:
     config["Settings"][target]=value
-  with open("config.ini", 'w') as f:
-    config.write(f)
+  with open("config.yaml", 'w') as f:
+    yaml.dump(config,f)
 
 #new user
 def newUserSetup(clargs):
@@ -65,7 +65,13 @@ def covertVocSet(clargs): #TODO fix whatever nameing is going on here
 def normal(clargs):
   action,_=tools.selectionInput("Action: ", clargs)
 
-  if action=="play":
+  if action=="h":
+    helper.run_helper(config)
+  elif action=="m":
+    helper.show_gamemodes(config)
+  elif action=="s":
+    pass
+  elif action=="play":
     game(clargs)
   elif action=="configure":
     configure(clargs)
@@ -86,8 +92,8 @@ def unloadVocsets(Vocsets):
    json.dump(Vocsets,f)
 
 if __name__ == "__main__":
-  config = configparser.ConfigParser()
-  config.read("config.ini")
+  with open("config.yaml","r") as f:
+    config=yaml.safe_load(f)
 
   clargs=sys.argv
   #Load and display vocset and banner

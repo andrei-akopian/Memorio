@@ -1,23 +1,23 @@
-Welcome to Meorio
+Welcome to Memorio
 Version: {version}
 by andrei-akopian
 Source Code:
 https://github.com/andrei-akopian/Memorio
 Written in Python
-
-Current user: {user}
-Current keymap: {keymap}
-
-
-
-
-even more info
-
+Configuration:
+    Current user: {user}
+    Current keymap: {keymap}
+Commands:
+    [h] - help
+    [m] - show avalable gamemodes
+    [s] - view settings
 
 
 
-info into
 
 
-Good morning
+
+
+
+
 L23-------------END-----------
