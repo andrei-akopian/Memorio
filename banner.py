@@ -6,12 +6,16 @@ def displayBanner(Vocsets,config): #TODO rename banner to something else
 
     terminal_size = os.get_terminal_size() #TODO put this into main when rewritting
     bannertext=[]
-    with open("logoPixels.txt","r") as f:
-        logoRaw=f.readlines()
     with open("bannertext.txt","r") as f:
-        bannertext=f.readlines()
+        bannertext=f.read().format(
+                version=config["About"]["version"],
+                user=config["Settings"]["user"],
+                keymap=config["Settings"]["keymap"])
+    bannertext=bannertext.split("\n")
 
     logo=[]
+    with open("logoPixels.txt","r") as f:
+        logoRaw=f.readlines()
     for logoRaw in logoRaw:
         cords=logoRaw.strip("\n").split(",")
         logo.append((int(cords[0]),int(cords[1])))

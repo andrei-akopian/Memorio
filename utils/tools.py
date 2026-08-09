@@ -7,7 +7,6 @@ def selectionInput(prompt,clargs,checkfunction=lambda x: (True, None)):
 
     Checks if there is a valid input in argv, if not, loops untile the user enters a valid one.
 
-
     user_name, _ = (tools.)selectionInput("User Name:",clargs)
     raw_input, full_name = (tools.)selectionInput("Full Name:",clargs,lambda name: (True,name.split(" ")))
     """

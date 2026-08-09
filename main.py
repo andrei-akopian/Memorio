@@ -39,7 +39,7 @@ def game(clargs):
   #end
   unloadVocsets(Vocsets)
 
-def covertVocSet(clargs): #TODO fix whatever nameing is going on here
+def covertVocSet(clargs): #TODO fix whatever naming is going on here
   print("=Convert Vocset=")
   vocsetName=selectionInput("Vocset Name:",clargs)
   path=selectionInput("Path ot input file:",clargs)
@@ -69,11 +69,9 @@ def normal(clargs):
     helper.run_helper(config)
   elif action=="m":
     helper.show_gamemodes(config)
-  elif action=="s":
-    pass
   elif action=="play":
     game(clargs)
-  elif action=="configure":
+  elif action in ["configure","c"]:
     configure(clargs)
   elif action=="convocset":
     covertVocSet(clargs)
